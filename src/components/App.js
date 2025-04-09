@@ -1,8 +1,12 @@
 import About from "./about";
+import Coaches from "./coaches";
 import Navbar from "./navbar";
 import Nextabout from "./nextabout";
 import Plan from "./plan";
-//import Login from "./login";
+import Visit from "./visit";
+import Footer from "./footer";
+
+
 
 function App() {
     return (
@@ -11,6 +15,9 @@ function App() {
             <About/>
             <Nextabout/>
             <Plan/>
+            <Coaches/>
+            <Visit/>
+            <Footer/>
             
             </div>   
     );

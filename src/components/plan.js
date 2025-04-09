@@ -1,6 +1,34 @@
+import { useState } from 'react';
 import '../styles/plan.css';
 
 function Plan() {
+    const [showRatingModal, setShowRatingModal] = useState(false);
+    const [currentPlan, setCurrentPlan] = useState('');
+    const [ratings, setRatings] = useState({
+        '7 Days': [],
+        '1 Month': [],
+        '3 Months': [],
+        '1 Year': []
+    });
+    const [newRating, setNewRating] = useState('');
+
+    const handleRateClick = (plan) => {
+        setCurrentPlan(plan);
+        setShowRatingModal(true);
+    };
+
+    const handleSubmitRating = (e) => {
+        e.preventDefault();
+        if (newRating.trim()) {
+            setRatings(prev => ({
+                ...prev,
+                [currentPlan]: [...prev[currentPlan], newRating]
+            }));
+            setNewRating('');
+            setShowRatingModal(false);
+        }
+    };
+
     return (
         <div id="plan" className="container">
             <h1>Our Plan</h1>
@@ -10,30 +38,66 @@ function Plan() {
             </div>
             
             <div className="plans-container">
-                <div className="plan-card">
-                    <div className="plan-duration">7 Days</div>
-                    <div className="plan-rate">Weekly Rate</div>
-                    <button className="btn">Select Plan</button>
-                </div>
-                
-                <div className="plan-card">
-                    <div className="plan-duration">1 Month</div>
-                    <div className="plan-rate">Monthly Rate</div>
-                    <button className="btn">Select Plan</button>
-                </div>
-                
-                <div className="plan-card">
-                    <div className="plan-duration">6 Months</div>
-                    <div className="plan-rate">Biannual Rate</div>
-                    <button className="btn">Select Plan</button>
-                </div>
-                
-                <div className="plan-card">
-                    <div className="plan-duration">1 Year</div>
-                    <div className="plan-rate">Annual Rate</div>
-                    <button className="btn">Select Plan</button>
-                </div>
+                {['7 Days', '1 Month', '3 Months', '1 Year'].map((plan) => (
+                    <div key={plan} className="plan-card">
+                        <div className="plan-duration">{plan}</div>
+                        <div className="plan-rate">{plan.includes('7') ? 'Weekly' : 
+                            plan.includes('Month') ? 'Monthly' : 
+                            plan.includes('3') ? '3-Monthly' : 'Annual'} Rate</div>
+                        <button 
+                            className="btn" 
+                            onClick={() => handleRateClick(plan)}
+                        >
+                            Rate
+                        </button>
+                    </div>
+                ))}
             </div>
+
+            {/* Rating Modal */}
+            {showRatingModal && (
+                <div className="rating-modal-overlay">
+                    <div className="rating-modal">
+                        <h3>Rate {currentPlan} Plan</h3>
+                        
+                        {/* Display existing ratings */}
+                        <div className="existing-ratings">
+                            <h4>Existing Ratings:</h4>
+                            {ratings[currentPlan].length > 0 ? (
+                                <ul>
+                                    {ratings[currentPlan].map((rating, index) => (
+                                        <li key={index}>{rating}</li>
+                                    ))}
+                                </ul>
+                            ) : (
+                                <p>No ratings yet</p>
+                            )}
+                        </div>
+                        
+                        {/* Add new rating */}
+                        <form onSubmit={handleSubmitRating}>
+                            <textarea
+                                value={newRating}
+                                onChange={(e) => setNewRating(e.target.value)}
+                                placeholder="Write your rating..."
+                                required
+                            />
+                            <div className="rating-buttons">
+                                <button type="submit" className="submit-rating">
+                                    Submit Rating
+                                </button>
+                                <button 
+                                    type="button" 
+                                    className="cancel-rating"
+                                    onClick={() => setShowRatingModal(false)}
+                                >
+                                    Cancel
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            )}
         </div>
     );
 }

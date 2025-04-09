@@ -7,6 +7,7 @@ import Register from './register';
 function Navbar() {
     const [showLogin, setShowLogin] = useState(false);
     const [showSignUp, setShowSignUp] = useState(false);
+    const [showRegister, setShowRegister] = useState(false);
     const modalRef = useRef(null);
 
     // Close modal when clicking outside
@@ -15,31 +16,36 @@ function Navbar() {
             if (modalRef.current && !modalRef.current.contains(event.target)) {
                 setShowLogin(false);
                 setShowSignUp(false);
+                setShowRegister(false);
             }
         }
 
-        if (showLogin || showSignUp) {
+        if (showLogin || showSignUp || showRegister) {
             document.addEventListener('mousedown', handleClickOutside);
         }
 
         return () => {
             document.removeEventListener('mousedown', handleClickOutside);
         };
-    }, [showLogin, showSignUp]);
+    }, [showLogin, showSignUp, showRegister]);
+
+    const handleRegister = (formData) => {
+        // Handle registration logic here
+        console.log('Registration data:', formData);
+    };
 
     return (
         <>
             <header className="header">
-                <a href="#" className="logo">Legends</a>
+                <a href="#about" className="logo">Legends</a>
                 <nav className="navbar">
-                    <a href="#about">About</a>
-                    <a href="#why">Why join us?</a>
-                    <a href="#plan">Plan</a>
-                    <a href="#Coaches">Coaches</a>
-                    <a href="#Visit">Visit our Gym</a>
+                    <a href="#why">About</a>
                     
-                    <button onClick={() => setShowLogin(true)}>Register</button>
-
+                    <a href="#plan">Plan</a>
+                    <a href="#coaches">Coaches</a>
+                    <a href="#visit">Visit our Gym</a>
+                    
+                    <button onClick={() => setShowRegister(true)}>Register</button>
                     <button onClick={() => setShowLogin(true)}>Sign in</button>
                 </nav>
             </header>
@@ -69,6 +75,18 @@ function Navbar() {
                                 setShowSignUp(false);
                                 setShowLogin(true);
                             }}
+                        />
+                    </div>
+                </div>
+            )}
+
+            {/* Register Modal */}
+            {showRegister && (
+                <div className="modal-overlay">
+                    <div className="modal" ref={modalRef}>
+                        <Register 
+                            onClose={() => setShowRegister(false)}
+                            onRegister={handleRegister}
                         />
                     </div>
                 </div>

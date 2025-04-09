@@ -1,0 +1,141 @@
+/* Visit.css */
+
+.visit-container {
+    max-width: 2000px;
+   
+    padding: 60px 20px;
+    background-color: #f9f9f9;
+}
+
+.visit-title {
+    font-size: 42px;
+    color: #f8b500;
+    margin-bottom: 50px;
+    text-align: center;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    position: relative;
+}
+
+.visit-title::after {
+    content: '';
+    position: absolute;
+    bottom: -15px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 350px;
+    height: 3px;
+    background-color: #f8b500;
+}
+
+.visit-content {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 40px;
+    align-items: center;
+}
+
+.socials-section {
+    background-color: white;
+    padding: 40px;
+    border-radius: 15px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+}
+
+.socials-title {
+    font-size: 28px;
+    color: #393e46;
+    margin-bottom: 30px;
+    position: relative;
+    display: inline-block;
+}
+
+.socials-title::after {
+    content: '';
+    position: absolute;
+    bottom: -10px;
+    left: 0;
+    width: 200px;
+    height: 3px;
+    background-color: #f8b500;
+}
+
+.contact-info {
+    display: flex;
+    flex-direction: column;
+    gap: 25px;
+}
+
+.info-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 15px;
+}
+
+.info-icon {
+    color: #f8b500;
+    font-size: 24px;
+    margin-top: 3px;
+}
+
+.info-text {
+    font-size: 18px;
+    color: #393e46;
+    margin: 0;
+    line-height: 1.6;
+}
+
+.map-section {
+    height: 400px;
+    border-radius: 15px;
+    overflow: hidden;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+}
+
+.gym-map {
+    width: 100%;
+    height: 100%;
+}
+
+/* Responsive adjustments */
+@media (max-width: 900px) {
+    .visit-content {
+        grid-template-columns: 1fr;
+    }
+    
+    .map-section {
+        height: 350px;
+    }
+}
+
+@media (max-width: 600px) {
+    .visit-title {
+        font-size: 36px;
+    }
+    
+    .socials-section {
+        padding: 30px;
+    }
+    
+    .socials-title {
+        font-size: 24px;
+    }
+    
+    .info-text {
+        font-size: 16px;
+    }
+}
+
+@media (max-width: 480px) {
+    .visit-container {
+        padding: 50px 15px;
+    }
+    
+    .visit-title {
+        font-size: 32px;
+    }
+    
+    .socials-section {
+        padding: 25px;
+    }
+}
