@@ -1,0 +1,4 @@
+body {
+  padding-top: 50%;
+  overflow-x: hidden; /* Pushes everything down */
+}

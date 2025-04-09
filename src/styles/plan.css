@@ -1,0 +1,102 @@
+body {
+    background-image: url(/public/icons/image.png);
+    background-size: cover; /* or 'contain' depending on your needs */
+    background-repeat: no-repeat;
+    background-position: center;
+    background-attachment: fixed; /* optional - makes it fixed while scrolling */
+}
+    
+    .container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 40px 20px;
+        
+    }
+    
+    h1 {
+        color: #2c3e50;
+        text-align: center;
+        margin-bottom: 30px;
+        font-size: 2.5rem;
+    }
+    
+    .membership-header {
+        background-color: #5c636e;
+        color: #f8b500;
+        padding: 20px;
+        text-align: center;
+        border-radius: 8px 8px 0 0;
+        margin-bottom: 30px;
+    }
+    
+    .membership-header h2 {
+        margin: 0;
+        font-size: 2rem;
+    }
+    
+    .plans-container {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-between;
+        gap: 20px;
+    }
+    
+    .plan-card {
+        background-color: #f2f2f2;
+        border-radius: 8px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        flex: 1;
+        min-width: 250px;
+        padding: 25px;
+        text-align: center;
+        transition: transform 0.3s ease;
+    }
+    
+    .plan-card:hover {
+        transform: translateY(-10px);
+        box-shadow: 0 0 5px rgb(202, 202, 185), 
+                0 0 25px rgb(177, 177, 158), 
+                0 0 50px rgb(214, 214, 190), 
+                0 0 200px rgb(194, 194, 176);
+    }
+    
+    .plan-duration {
+        color:#5c636e;
+        font-size: 1.5rem;
+        font-weight: bold;
+        margin-bottom: 10px;
+    }
+    
+    .plan-rate {
+        color:#393e46;
+        font-size: 1.3rem;
+        font-weight: bold;
+        margin-bottom: 20px;
+    }
+    
+    .btn {
+        background-color: #f7f7f7;
+        color:#f8b500;
+        border: none;
+        padding: 12px 25px;
+        border-radius: 5px;
+        cursor: pointer;
+        font-size: 1rem ;
+        font-weight: bold;
+        transition: background-color 0.3s;
+    }
+    
+    .btn:hover {
+        background-color:#f7f7f7;
+        color:#f8b500;
+        box-shadow: 0 0 5px rgb(233, 231, 125), 
+              0 0 25px rgb(233, 231, 125), 
+              0 0 50px rgb(233, 231, 125), 
+              0 0 200px rgb(233, 231, 125);
+    }
+    
+    @media (max-width: 768px) {
+        .plans-container {
+            flex-direction: column;
+        }
+    }
