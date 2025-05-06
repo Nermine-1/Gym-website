@@ -102,7 +102,7 @@ def login():
     except Error as e:
         return jsonify({"error": str(e)}), 500
 
-
+#eeee
 @app.route("/api/register", methods=["POST"])
 def register_plan():
     data = request.json
