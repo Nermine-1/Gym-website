@@ -6,19 +6,26 @@ import hashlib
 from functools import wraps
 
 app = Flask(__name__)
-CORS(app, supports_credentials=True, resources={
-    r"/api/*": {
-        "origins": ["http://localhost:3000"],  # Your React app's origin
-        "methods": ["GET", "POST", "PUT", "DELETE"],
-        "allow_headers": ["Content-Type", "Authorization"],
-        "expose_headers": ["Content-Type"],
-    }
-})
-app.secret_key = 'your-very-secure-secret-key'  # Change this!
-app.config['SESSION_COOKIE_NAME'] = 'gym_admin_session'
-app.config['SESSION_COOKIE_HTTPONLY'] = True
-app.config['SESSION_COOKIE_SECURE'] = False  # Set to True in production with HTTPS
-app.config['SESSION_COOKIE_SAMESITE'] = 'Lax'
+# Apply a more specific CORS configuration
+CORS(
+    app,
+    supports_credentials=True,
+    resources={
+        r"/api/*": {
+            "origins": [
+                "http://localhost:3000"
+            ],  # Adjust if your frontend is on a different port
+            "methods": ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+            "allow_headers": ["Content-Type", "Authorization"],
+            "expose_headers": ["Content-Type"],
+        }
+    },
+)
+app.secret_key = "your-very-secure-secret-key"  # Change this!
+app.config["SESSION_COOKIE_NAME"] = "gym_admin_session"
+app.config["SESSION_COOKIE_HTTPONLY"] = True
+app.config["SESSION_COOKIE_SECURE"] = False  # Set to True in production with HTTPS
+app.config["SESSION_COOKIE_SAMESITE"] = "Lax"
 db_config = {
     "host": "localhost",
     "user": "root",
@@ -26,52 +33,75 @@ db_config = {
     "database": "gym_website",
 }
 
+
 def hash_password(password):
     return hashlib.sha256(password.encode()).hexdigest()
+
 
 # Admin login required decorator
 def admin_login_required(f):
     @wraps(f)
     def decorated_function(*args, **kwargs):
-        if not session.get('admin_logged_in'):
+        if not session.get("admin_logged_in"):
             return jsonify({"error": "Unauthorized access. Admin login required."}), 401
         return f(*args, **kwargs)
+
     return decorated_function
+
 
 # Admin authentication routes
 @app.route("/api/admin/login", methods=["POST"])
 def admin_login():
     data = request.json
-    admin_username = data.get("admin_username")
-    admin_password = data.get("admin_password")
-
-    if not is_admin({"username": admin_username, "password": admin_password}):
-        return jsonify({"error": "Unauthorized access. Admin only."}), 403
-
-    new_username = data.get("new_username")
-    new_password = data.get("new_password")
-
-    if not new_username or not new_password:
+    if data is None:
         return (
-            jsonify({"error": "Username and password for the new admin are required"}),
-            400,
+            jsonify({"error": "Invalid JSON or Content-Type not application/json"}),
+            415,
         )
+
+    username = data.get("username")
+    password = data.get("password")
+
+    if not username or not password:
+        return jsonify({"error": "Username and password are required"}), 400
 
     try:
         conn = mysql.connector.connect(**db_config)
         cursor = conn.cursor(dictionary=True)
+        cursor.execute(
+            "SELECT * FROM admins WHERE username = %s AND password = %s",
+            (username, hash_password(password)),
+        )
+        admin = cursor.fetchone()
+        conn.close()  # Close connection
 
-        cursor.execute("SELECT * FROM admins WHERE username = %s", (new_username,))
-        existing_admin = cursor.fetchone()
+        if admin:
+            session["admin_logged_in"] = True
+            session["admin_username"] = username
+            return jsonify(
+                {
+                    "message": "Admin login successful",
+                    "admin_username": session.get("admin_username"),
+                }
+            )
+        else:
+            return jsonify({"error": "Invalid admin credentials"}), 401
+    except Error as e:
+        return jsonify({"error": str(e)}), 500
 
-        if existing_admin:
-            return jsonify({"error": "Username already exists"}), 400
 
-        hashed_password = hash_password(new_password)
+@app.route("/api/admin/register", methods=["POST"])
+def admin_register():
+    data = request.json
+    new_username = data["username"]
+    new_password = data["password"]
 
+    try:
+        conn = mysql.connector.connect(**db_config)
+        cursor = conn.cursor()
         cursor.execute(
             "INSERT INTO admins (username, password) VALUES (%s, %s)",
-            (new_username, hashed_password),
+            (new_username, hash_password(new_password)),
         )
         conn.commit()
 
@@ -85,7 +115,7 @@ def admin_login():
 def signup():
     data = request.json
     email = data["email"]
-    full_name = data["full_name"]
+    full_name = data["fullName"]
     password = hash_password(data["password"])
 
     try:
@@ -115,17 +145,37 @@ def login():
         )
         user = cursor.fetchone()
         if user:
-            return jsonify({"message": "Login successful", "user": user})
+            # Ensure 'id' is included in the user dictionary
+            return jsonify(
+                {
+                    "message": "Login successful",
+                    "user": {
+                        "id": user["id"],
+                        "full_name": user["full_name"],
+                        "email": user["email"],
+                    },
+                }
+            )
         else:
             return jsonify({"error": "Invalid email or password"}), 401
     except Error as e:
         return jsonify({"error": str(e)}), 500
 
-#eeee
+
 @app.route("/api/register", methods=["POST"])
 def register_plan():
     data = request.json
-    user_id = data["user_id"]
+    if data is None:
+        return (
+            jsonify({"error": "Invalid JSON or Content-Type not application/json"}),
+            415,
+        )
+
+    # Ensure user_id is present, otherwise it's a bad request or needs login
+    user_id = data.get("user_id")
+    if not user_id:
+        return jsonify({"error": "user_id is required"}), 400
+
     name = data["name"]
     email = data["email"]
     contact = data["contact"]
@@ -149,10 +199,10 @@ def register_plan():
         return jsonify({"error": str(e)}), 500
 
 
-def is_admin(request_data):
-    username = request_data.get("username")
-    password = request_data.get("password")
-
+# Renamed and modified is_admin to return a boolean and handle session
+def is_admin_check(username, password):
+    if not username or not password:  # Added check for empty credentials
+        return False
     try:
         conn = mysql.connector.connect(**db_config)
         cursor = conn.cursor(dictionary=True)
@@ -161,21 +211,51 @@ def is_admin(request_data):
             (username, hash_password(password)),
         )
         admin = cursor.fetchone()
+        conn.close()  # Close connection
 
         if admin:
-            session['admin_logged_in'] = True
-            session['admin_username'] = username
-            return jsonify({"message": "Admin login successful"})
-        return jsonify({"error": "Invalid admin credentials"}), 401
+            session["admin_logged_in"] = True
+            session["admin_username"] = username
+            return True  # Return boolean True
+        return False  # Return boolean False
     except Error as e:
-        return jsonify({"error": str(e)}), 500
+        # Log the error for server-side debugging
+        print(f"Database error in is_admin_check: {e}")
+        return False  # Return False on error
+
+
+@app.route(
+    "/api/admin/authenticate", methods=["POST"]
+)  # Example direct admin login route
+def authenticate_admin():
+    data = request.json
+    if data is None:
+        return (
+            jsonify({"error": "Invalid JSON or Content-Type not application/json"}),
+            415,
+        )
+
+    username = data.get("username")
+    password = data.get("password")
+
+    if is_admin_check(username, password):
+        return jsonify(
+            {
+                "message": "Admin login successful",
+                "admin_username": session.get("admin_username"),
+            }
+        )
+    else:
+        return jsonify({"error": "Invalid admin credentials"}), 401
+
 
 @app.route("/api/admin/logout", methods=["POST"])
 @admin_login_required
 def admin_logout():
-    session.pop('admin_logged_in', None)
-    session.pop('admin_username', None)
+    session.pop("admin_logged_in", None)
+    session.pop("admin_username", None)
     return jsonify({"message": "Admin logged out successfully"})
+
 
 # Admin dashboard routes
 @app.route("/api/admin/dashboard/stats", methods=["GET"])
@@ -184,37 +264,42 @@ def get_dashboard_stats():
     try:
         conn = mysql.connector.connect(**db_config)
         cursor = conn.cursor(dictionary=True)
-        
+
         # Total members
         cursor.execute("SELECT COUNT(*) as total FROM users")
-        total_members = cursor.fetchone()['total']
-        
+        total_members = cursor.fetchone()["total"]
+
         # Active subscriptions
         cursor.execute("SELECT COUNT(DISTINCT user_id) as active FROM registrations")
-        active_subscriptions = cursor.fetchone()['active']
-        
+        active_subscriptions = cursor.fetchone()["active"]
+
         # Total revenue
         cursor.execute("SELECT SUM(price) as revenue FROM registrations")
-        total_revenue = cursor.fetchone()['revenue'] or 0
-        
+        total_revenue = cursor.fetchone()["revenue"] or 0
+
         # Recent registrations
-        cursor.execute("""
+        cursor.execute(
+            """
             SELECT r.*, u.full_name 
             FROM registrations r
             JOIN users u ON r.user_id = u.id
             ORDER BY r.date DESC
             LIMIT 5
-        """)
+        """
+        )
         recent_registrations = cursor.fetchall()
-        
-        return jsonify({
-            "total_members": total_members,
-            "active_subscriptions": active_subscriptions,
-            "total_revenue": float(total_revenue),
-            "recent_registrations": recent_registrations
-        })
+
+        return jsonify(
+            {
+                "total_members": int(total_members),
+                "active_subscriptions": active_subscriptions,
+                "total_revenue": float(total_revenue),
+                "recent_registrations": recent_registrations,
+            }
+        )
     except Error as e:
         return jsonify({"error": str(e)}), 500
+
 
 @app.route("/api/admin/members", methods=["GET"])
 @admin_login_required
@@ -222,23 +307,80 @@ def get_all_members():
     try:
         conn = mysql.connector.connect(**db_config)
         cursor = conn.cursor(dictionary=True)
-        
-        cursor.execute("""
+
+        cursor.execute(
+            """
             SELECT u.id, u.full_name, u.email, 
-                   r.plan, r.price, r.date as join_date,
-                   CASE WHEN r.user_id IS NOT NULL THEN 'Active' ELSE 'Inactive' END as status
+               COALESCE(r.plan, '-') as plan, 
+               COALESCE(r.price, '-') as price, 
+               COALESCE(r.date, '-') as join_date
             FROM users u
             LEFT JOIN registrations r ON u.id = r.user_id
-            ORDER BY r.date DESC
-        """)
+            ORDER BY COALESCE(r.date, '-') DESC
+        """
+        )
         members = cursor.fetchall()
-        
+
         return jsonify({"members": members})
     except Error as e:
         return jsonify({"error": str(e)}), 500
 
-# Keep your existing routes (signup, login, register, etc.)
-# ... [your existing routes remain unchanged]
+
+@app.route("/api/admin/members/<member_id>", methods=["DELETE"])
+def delete_member(member_id):
+    try:
+        conn = mysql.connector.connect(**db_config)
+        cursor = conn.cursor()
+        # First, delete any registrations associated with the user
+        cursor.execute("DELETE FROM registrations WHERE user_id = %s", (member_id,))
+
+        # Then, delete the user
+        cursor.execute("DELETE FROM users WHERE id = %s", (member_id,))
+        conn.commit()
+        if cursor.rowcount > 0:
+            return jsonify({"message": "Member deleted successfully"}), 200
+        else:
+            return jsonify({"error": "Member not found"}), 404
+    except Error as e:
+        return jsonify({"error": str(e)}), 500
+    finally:
+        if conn.is_connected():
+            cursor.close()
+            conn.close()
+
+
+@app.route("/api/admin/members/<member_id>/subscription", methods=["DELETE"])
+def cancel_member_subscription(member_id):
+    try:
+        conn = mysql.connector.connect(**db_config)
+        cursor = conn.cursor()
+        # Delete the registration for the user
+        # Assuming a user can have at most one active registration for simplicity
+        # If multiple registrations are possible, you might need a registration_id
+        cursor.execute("DELETE FROM registrations WHERE user_id = %s", (member_id,))
+        conn.commit()
+        if cursor.rowcount > 0:
+            return (
+                jsonify({"message": "Subscription cancelled successfully"}),
+                200,
+            )
+        else:
+            # This could mean the user had no active subscription or user_id was not found
+            return (
+                jsonify(
+                    {
+                        "error": "No active subscription found for this member or member not found"
+                    }
+                ),
+                404,
+            )
+    except Error as e:
+        return jsonify({"error": str(e)}), 500
+    finally:
+        if conn.is_connected():
+            cursor.close()
+            conn.close()
+
 
 if __name__ == "__main__":
     app.run(debug=True)
