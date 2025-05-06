@@ -1,119 +1,108 @@
 /* signup.css */
 /* (Same as login.css but with signup-specific classes) */
 
-/* Set the background color for the entire page */
-body {
-    background-color: #f0f0f0;
-    font-family: Arial, sans-serif;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
-    margin: 0;
-}
-
 /* Container for the signup form */
 .signup-container {
-    width: 400px;
-    padding: 40px;
-    border-radius: 8px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    background-color: #f7f7f7;
-    text-align: center;
+  width: 400px;
+  padding: 40px;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  background-color: #f7f7f7;
+  text-align: center;
 }
 
 /* Heading for the signup form */
 .signup-heading {
-    font-size: 34px;
-    margin-bottom: 30px;
-    color: #f8b500;
-    transition: color 0.3s ease;
+  font-size: var(--text-3xl);
+  margin-bottom: 30px;
+  color: #f8b500;
+  font-weight: var(--font-medium);
+  transition: color 0.3s ease;
 }
 
 .signup-heading:hover {
-    color: rgb(233, 231, 125);
-    text-shadow: 0 0 5px rgb(233, 231, 125), 
-                 0 0 25px rgb(233, 231, 125), 
-                 0 0 50px rgb(233, 231, 125), 
-                 0 0 200px rgb(233, 231, 125);
+  color: rgb(233, 231, 125);
+  text-shadow: 0 0 5px rgb(233, 231, 125), 0 0 25px rgb(233, 231, 125),
+    0 0 50px rgb(233, 231, 125), 0 0 200px rgb(233, 231, 125);
 }
 
 /* Group for each label and input field */
 .input-group {
-    margin-bottom: 30px;
-    text-align: left;
+  margin-bottom: 30px;
+  text-align: left;
 }
 
 /* Wrapper around each input and label */
 .input-wrapper {
-    position: relative;
+  position: relative;
 }
 
 /* Style for input fields */
 .input-field {
-    width: 100%;
-    padding: 14px 10px 14px 20px;
-    font-size: 16px;
-    border: 1px solid #ddd;
-    border-radius: 20px;
-    box-sizing: border-box;
-    margin-top: 5px;
+  width: 100%;
+  padding: 14px 10px 14px 20px;
+  font-size: var(--text-base);
+  font-weight: var(--font-regular);
+  border: 1px solid #ddd;
+  border-radius: 20px;
+  box-sizing: border-box;
+  margin-top: 5px;
 }
 
 /* Label for input fields */
 .input-label {
-    position: absolute;
-    top: 50%;
-    left: 20px;
-    transform: translateY(-50%);
-    font-size: 1em;
-    color: #aaa;
-    pointer-events: none;
-    transition: 0.5s ease;
+  position: absolute;
+  top: 50%;
+  left: 20px;
+  transform: translateY(-50%);
+  font-size: var(--text-sm);
+  font-weight: var(--font-regular);
+  color: #aaa;
+  pointer-events: none;
+  transition: 0.5s ease;
 }
 
 /* When input is focused or valid, label moves up */
 .input-field:focus + .input-label,
 .input-field:valid + .input-label {
-    top: 0;
-    font-size: 0.8em;
-    background: #fff;
-    padding: 0 6px;
-    color: #f8b500;
+  top: 0;
+  font-size: var(--text-xs);
+  background: #fff;
+  padding: 0 6px;
+  color: #f8b500;
 }
 
 /* Style for the signup button */
 .signup-button {
-    width: 100%;
-    padding: 14px;
-    font-size: 18px;
-    font-weight: bold;
-    color: #393e46;
-    background-color: #f8b500;
-    border: none;
-    border-radius: 20px;
-    cursor: pointer;
+  width: 100%;
+  padding: 14px;
+  font-size: var(--text-lg);
+  font-weight: var(--font-medium);
+  color: #393e46;
+  background-color: #f8b500;
+  border: none;
+  border-radius: 20px;
+  cursor: pointer;
 }
 
 .signup-button:hover {
-    box-shadow: 0 0 5px rgb(233, 231, 125), 
-                0 0 25px rgb(233, 231, 125), 
-                0 0 50px rgb(233, 231, 125), 
-                0 0 200px rgb(233, 231, 125);
+  box-shadow: 0 0 5px rgb(233, 231, 125), 0 0 25px rgb(233, 231, 125),
+    0 0 50px rgb(233, 231, 125), 0 0 200px rgb(233, 231, 125);
 }
 
 /* Styling for the Login link */
 .login-link {
-    margin-top: 20px;
+  margin-top: 20px;
 }
 
 .login-text {
-    color: #5c636e;
-    text-decoration: none;
-    transition: color 0.3s ease;
+  color: #5c636e;
+  text-decoration: none;
+  font-weight: var(--font-regular);
+  transition: color 0.3s ease;
 }
 
 .login-text:hover {
-    color: #a1a1a1;
-    text-decoration: underline;
+  color: #a1a1a1;
+  text-decoration: underline;
 }

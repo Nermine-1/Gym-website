@@ -15,11 +15,11 @@
   }
   
   .about-content-container h2 {
-    font-size: 2.5rem;
+    font-size: var(--text-3xl);
     color: #393e46;
     margin-bottom: 30px;
     text-transform: uppercase;
-    font-weight: 700;
+    font-weight: var(--font-medium);
   }
   
   .about-content-container h2 span {
@@ -27,8 +27,8 @@
   }
   
   .about-description {
-    font-size: 1.1rem;
-    line-height: 1.8;
+    font-size: var(--text-base);
+    line-height: var(--leading-relaxed);
     color: #555;
     max-width: 800px;
     margin: 0 auto 50px;
@@ -36,12 +36,12 @@
   
   /* Offerings Section */
   .offerings-section h3 {
-    font-size: 3rem;
+    font-size: var(--text-3xl);
     color: #393e46;
     margin-bottom: 40px;
     position: relative;
     display: inline-block;
-    font-weight: 600;
+    font-weight: var(--font-medium);
   }
   
   .offerings-section h3::after {
@@ -88,16 +88,16 @@
   
   
   .offering-number {
-    font-size: 3rem;
-    font-weight: 700;
+    font-size: var(--text-3xl);
+    font-weight: var(--font-medium);
     color: #f8b500;
     margin-bottom: 15px;
   }
   
   .offering-title {
-    font-size: 2rem;
+    font-size: var(--text-xl);
     color: #393e46;
-    font-weight: 600;
+    font-weight: var(--font-medium);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -105,9 +105,9 @@
   }
   
   .offering-title1 {
-    font-size: 2rem;
+    font-size: var(--text-xl);
     color: #393e46;
-    font-weight: 600;
+    font-weight: var(--font-medium);
     display: flex;
     padding-top: 10px;
     align-items: center;
@@ -115,9 +115,9 @@
     gap: 10px;
   }
   .offering-title2 {
-    font-size: 2rem;
+    font-size: var(--text-xl);
     color: #393e46;
-    font-weight: 600 ;
+    font-weight: var(--font-medium);
     display: flex; 
     align-items: center;
     justify-content: center;
@@ -128,13 +128,13 @@
 
   .offering-icon {
     color: #f8b500;
-    font-size: 2rem;
+    font-size: var(--text-2xl);
   }
   
   /* Responsive Adjustments */
   @media (max-width: 992px) {
     .about-content-container h2 {
-      font-size: 2.2rem;
+      font-size: var(--text-2xl);
     }
   }
   
@@ -151,11 +151,11 @@
   
   @media (max-width: 576px) {
     .about-content-container h2 {
-      font-size: 1.8rem;
+      font-size: var(--text-xl);
     }
     
     .about-description {
-      font-size: 1rem;
+      font-size: var(--text-sm);
     }
     
     .offering-card {
@@ -163,10 +163,12 @@
     }
     
     .offering-number {
-      font-size: 2.5rem;
+      font-size: var(--text-2xl);
     }
     
-    .offering-title {
-      font-size: 1rem;
+    .offering-title,
+    .offering-title1,
+    .offering-title2 {
+      font-size: var(--text-lg);
     }
   }
