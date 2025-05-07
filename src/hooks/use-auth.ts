@@ -81,25 +81,5 @@ export const useLogout = () => {
 export const useCurrentUser = () => {
   const { setUser } = useAuth();
 
-  const queryResult = useQuery({
-    queryKey: ["currentUser"],
-    queryFn: () => authApi.getCurrentUser(),
-    retry: false,
-    // Don't refetch the current user too often
-    refetchOnMount: false,
-    refetchOnWindowFocus: false,
-    refetchOnReconnect: false,
-    staleTime: 5 * 60 * 1000, // 5 minutes
-  });
-
-  useEffect(() => {
-    if (queryResult.isSuccess && queryResult.data) {
-      setUser(queryResult.data.user);
-    } else if (queryResult.isError) {
-      // If fetching the current user fails, we assume the user is not logged in
-      setUser(null);
-    }
-  }, [queryResult.isSuccess, queryResult.isError, queryResult.data, setUser]);
-
-  return queryResult;
+  return {};
 };
