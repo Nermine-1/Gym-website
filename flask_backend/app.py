@@ -10,16 +10,7 @@ app = Flask(__name__)
 CORS(
     app,
     supports_credentials=True,
-    resources={
-        r"/api/*": {
-            "origins": [
-                "http://localhost:3000"
-            ],  # Adjust if your frontend is on a different port
-            "methods": ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
-            "allow_headers": ["Content-Type", "Authorization"],
-            "expose_headers": ["Content-Type"],
-        }
-    },
+    
 )
 app.secret_key = "your-very-secure-secret-key"  # Change this!
 app.config["SESSION_COOKIE_NAME"] = "gym_admin_session"
@@ -262,7 +253,7 @@ def get_current_user():
     # In a real implementation, this would use session cookies
     # or JWT tokens to determine the current user
     # For now, we'll return an error since we don't have session management implemented
-    return jsonify({"error": "Not implemented - no session management"}), 401
+    return jsonify({"error": "Not implemented - no session management"}), 200
 
 
 @app.route("/api/logout", methods=["POST"])

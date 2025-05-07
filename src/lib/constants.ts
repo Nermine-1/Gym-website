@@ -148,8 +148,8 @@ export const FOOTER_LINKS = {
   ],
 };
 
-export const gymAddress = "123 Legend Street, Fitness City, FC 54321";
-export const gymPhoneNumber = "(123) 456-7890";
+export const gymAddress = "Bou hjar, Tunis, Tunisia";
+export const gymPhoneNumber = "+216 90 000 000";
 export const gymEmail = "info@legendsgym.com";
 export const MAP_EMBED_URL =
   "https://www.google.com/maps/embed?pb=!1m16!1m12!1m3!1d3233.6124023251004!2d10.596869576237287!3d35.85850657021468!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!2m1!1sisitcom!5e0!3m2!1sfr!2stn!4v1744222953632!5m2!1sfr!2stn";
