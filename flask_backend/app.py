@@ -257,6 +257,21 @@ def admin_logout():
     return jsonify({"message": "Admin logged out successfully"})
 
 
+@app.route("/api/current-user", methods=["GET"])
+def get_current_user():
+    # In a real implementation, this would use session cookies
+    # or JWT tokens to determine the current user
+    # For now, we'll return an error since we don't have session management implemented
+    return jsonify({"error": "Not implemented - no session management"}), 401
+
+
+@app.route("/api/logout", methods=["POST"])
+def logout():
+    # In a full implementation, this would clear cookies or invalidate tokens
+    # Since we're handling auth on the client side for now, just return success
+    return jsonify({"message": "Logged out successfully"}), 200
+
+
 # Admin dashboard routes
 @app.route("/api/admin/dashboard/stats", methods=["GET"])
 @admin_login_required

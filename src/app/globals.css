@@ -1,0 +1,115 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 0 0% 92%; /* Light Gray (#D3D3D3) - slightly adjusted for better feel */
+    --foreground: 240 10% 3.9%; /* Default dark for text */
+
+    --card: 0 0% 100%; /* Base for glassmorphism, actual glass effect applied via Tailwind utilities */
+    --card-foreground: 240 10% 3.9%;
+
+    --popover: 0 0% 100%;
+    --popover-foreground: 240 10% 3.9%;
+
+    --primary: 49 100% 70%; /* Yellow (#FFDA63) */
+    --primary-foreground: 49 30% 25%; /* Darker yellow/brown for text on primary */
+
+    --secondary: 0 0% 96.1%; /* Default light gray for secondary elements */
+    --secondary-foreground: 240 5.9% 10%;
+
+    --muted: 0 0% 88%; 
+    --muted-foreground: 240 3.8% 46.1%;
+
+    --accent: 35 100% 63%; /* Darker Yellow (#FFB347) */
+    --accent-foreground: 35 30% 20%; /* Darker brown for text on accent */
+
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 0 0% 98%;
+
+    --border: 0 0% 85%; /* Adjusted border for light theme */
+    --input: 0 0% 89.8%;
+    --ring: 49 100% 65%; /* Primary color for rings, slightly darker for better visibility */
+
+    --radius: 0.75rem; /* Slightly more rounded for modern feel */
+
+    /* Sidebar specific colors - can be adjusted if sidebar is heavily used */
+    --sidebar-background: 0 0% 98%;
+    --sidebar-foreground: 240 5.3% 26.1%;
+    --sidebar-primary: 240 5.9% 10%;
+    --sidebar-primary-foreground: 0 0% 98%;
+    --sidebar-accent: 240 4.8% 95.9%;
+    --sidebar-accent-foreground: 240 5.9% 10%;
+    --sidebar-border: 220 13% 91%;
+    --sidebar-ring: 217.2 91.2% 59.8%;
+  }
+
+  .dark {
+    /* Dark theme - User did not request, but good to have a basic setup from shadcn */
+    --background: 224 71% 4%; /* Dark Blue/Gray */
+    --foreground: 210 40% 98%;
+
+    --card: 224 71% 6%; /* Slightly lighter dark for cards */
+    --card-foreground: 210 40% 98%;
+
+    --popover: 224 71% 4%;
+    --popover-foreground: 210 40% 98%;
+
+    --primary: 49 100% 65%; /* Yellow, slightly desaturated/darker for dark mode */
+    --primary-foreground: 49 100% 15%;
+
+    --secondary: 224 71% 10%;
+    --secondary-foreground: 210 40% 98%;
+
+    --muted: 224 71% 10%;
+    --muted-foreground: 210 40% 60%;
+
+    --accent: 35 100% 58%; /* Darker Yellow, slightly desaturated/darker */
+    --accent-foreground: 35 100% 10%;
+
+    --destructive: 0 63% 31%;
+    --destructive-foreground: 210 40% 98%;
+
+    --border: 224 71% 12%;
+    --input: 224 71% 12%;
+    --ring: 49 100% 65%;
+    
+    /* Sidebar specific colors for dark theme */
+    --sidebar-background: 240 5.9% 10%;
+    --sidebar-foreground: 240 4.8% 95.9%;
+    --sidebar-primary: 224.3 76.3% 48%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 240 3.7% 15.9%;
+    --sidebar-accent-foreground: 240 4.8% 95.9%;
+    --sidebar-border: 240 3.7% 15.9%;
+    --sidebar-ring: 217.2 91.2% 59.8%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground;
+    /* font-family removed to allow Inter font from layout.tsx to take precedence */
+  }
+}
+
+/* Custom scrollbar for a more modern look */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+::-webkit-scrollbar-track {
+  background: hsl(var(--background) / 0.5);
+  border-radius: 10px;
+}
+::-webkit-scrollbar-thumb {
+  background: hsl(var(--primary));
+  border-radius: 10px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: hsl(var(--accent));
+}
